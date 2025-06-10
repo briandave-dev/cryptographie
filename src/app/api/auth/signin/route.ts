@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
+import { createSession } from '@/lib/session';
 
 export async function POST(request: Request) {
   try {
@@ -17,7 +18,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Compare password with hashed password in database
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
@@ -26,6 +26,13 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+
+    // Create session
+    await createSession({
+      id: user.id,
+      username: user.username,
+      publicKey: user.publicKey
+    });
 
     return NextResponse.json({
       id: user.id,

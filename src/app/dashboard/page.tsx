@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Chart } from 'chart.js/auto';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { RefreshCcw, BarChart2 } from "lucide-react";
+import { RefreshCcw, BarChart2, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface VoteOption {
@@ -19,6 +20,7 @@ interface BallotResult {
 }
 
 const Dashboard = () => {
+  const router = useRouter();
   const [results, setResults] = useState<BallotResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +88,22 @@ const Dashboard = () => {
     });
   };
 
+  const handleSignOut = async () => {
+    try {
+      const response = await fetch('/api/auth/signout', {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        router.push('/login');
+      } else {
+        throw new Error('Failed to sign out');
+      }
+    } catch (error) {
+      console.error('Sign out error:', error);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -119,22 +137,34 @@ const Dashboard = () => {
     );
   }
 
-  if (!results || results.length === 0) {
-    return (
-      <div className="container mx-auto p-6">
-        <Card>
-          <CardContent className="pt-6 text-center">
-            <BarChart2 className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-            <h2 className="text-2xl font-semibold mb-2">No Results Yet</h2>
-            <p className="text-gray-500">Check back later for voting results</p>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
+  // if (!results || results.length === 0) {
+  //   return (
+  //     <div className="container mx-auto p-6">
+  //       <Card>
+  //         <CardContent className="pt-6 text-center">
+  //           <BarChart2 className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+  //           <h2 className="text-2xl font-semibold mb-2">No Results Yet</h2>
+  //           <p className="text-gray-500">Check back later for voting results</p>
+  //         </CardContent>
+  //       </Card>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <Button
+          onClick={handleSignOut}
+          variant="outline"
+          className="inline-flex items-center gap-2"
+        >
+          <LogOut className="h-4 w-4" />
+          Sign Out
+        </Button>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Voting Results Dashboard</CardTitle>
