@@ -326,7 +326,7 @@ const Dashboard = () => {
             </div>
 
             {/* View Mode Toggle */}
-            <div className="flex justify-center">
+            {/* <div className="flex justify-center">
               <div className="bg-white/70 backdrop-blur-sm rounded-xl p-2 border border-slate-200">
                 <div className="flex space-x-2">
                   {[
@@ -349,10 +349,10 @@ const Dashboard = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Results Display */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-slate-200 shadow-lg">
+            {/* <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-slate-200 shadow-lg">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold text-gray-800">
                   Résultats en Temps Réel
@@ -424,7 +424,7 @@ const Dashboard = () => {
                   <p className="text-gray-500">Les résultats apparaîtront ici une fois que les votes seront soumis.</p>
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Encryption Info */}
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6">
