@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       privateKey = decrypted;
       console.log('✅ Admin private key decrypted successfully');
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('❌ Failed to decrypt admin private key:', error.message);
       return NextResponse.json(
         { error: 'Invalid admin password or corrupted private key' },
@@ -160,7 +160,7 @@ export async function POST(request: Request) {
           voteTime: vote.createdAt
         });
 
-      } catch (error) {
+      } catch (error: any) {
         console.error(`❌ Error decrypting vote ${vote.id}:`, error.message);
         invalidVotes++;
       }
@@ -197,7 +197,7 @@ export async function POST(request: Request) {
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('💥 Decryption error:', error);
     return NextResponse.json(
       { 
