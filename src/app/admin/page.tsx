@@ -3,6 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Users, Vote, Settings, BarChart3, Lock, Unlock, Eye, EyeOff, Clock, CheckCircle, AlertCircle, Download, User } from 'lucide-react';
 
 
+interface ValidationErrors {
+  title?: string;
+  description?: string;
+  options?: string;
+}
+
 type Ballot = {
   id: string;
   title: string;
@@ -47,6 +53,7 @@ const AdminDashboard = () => {
   const [decryptedResults, setDecryptedResults] = useState<DecryptedResults | null>(null);
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState('overview'); // 'overview', 'voters', 'details'
+  const [formErrors, setFormErrors] = useState<ValidationErrors>({});
 
   useEffect(() => {
     fetchBallots();
@@ -63,8 +70,11 @@ const AdminDashboard = () => {
   };
 
   const handleCreateBallot = async () => {
-    setLoading(true);
+    if (!validateBallotForm()) {
+      return;
+    }
 
+    setLoading(true);
     try {
       const response = await fetch('/api/admin/ballots', {
         method: 'POST',
@@ -308,6 +318,33 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const validateBallotForm = (): boolean => {
+    const errors: ValidationErrors = {};
+    let isValid = true;
+
+    // Validate title
+    if (!newBallot.title.trim()) {
+      errors.title = "Le titre est obligatoire";
+      isValid = false;
+    }
+
+    // Validate description
+    if (!newBallot.description.trim()) {
+      errors.description = "La description est obligatoire";
+      isValid = false;
+    }
+
+    // Validate options - at least 2 non-empty options
+    const validOptions = newBallot.options.filter(opt => opt.trim() !== '');
+    if (validOptions.length < 2) {
+      errors.options = "Au moins 2 options sont requises";
+      isValid = false;
+    }
+
+    setFormErrors(errors);
+    return isValid;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
       {/* Header - Made responsive */}
@@ -401,11 +438,18 @@ const AdminDashboard = () => {
                 <input
                   type="text"
                   value={newBallot.title}
-                  onChange={(e) => setNewBallot(prev => ({ ...prev, title: e.target.value }))}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                  onChange={(e) => {
+                    setNewBallot(prev => ({ ...prev, title: e.target.value }));
+                    setFormErrors(prev => ({ ...prev, title: undefined }));
+                  }}
+                  className={`w-full px-4 py-3 rounded-xl border ${
+                    formErrors.title ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'
+                  } focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
                   placeholder="Ex: Élection présidentielle 2024"
-                  required
                 />
+                {formErrors.title && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.title}</p>
+                )}
               </div>
 
               <div>
@@ -415,10 +459,18 @@ const AdminDashboard = () => {
                 <input
                   type="text"
                   value={newBallot.description}
-                  onChange={(e) => setNewBallot(prev => ({ ...prev, description: e.target.value }))}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
-                  placeholder="Description optionnelle"
+                  onChange={(e) => {
+                    setNewBallot(prev => ({ ...prev, description: e.target.value }));
+                    setFormErrors(prev => ({ ...prev, description: undefined }));
+                  }}
+                  className={`w-full px-4 py-3 rounded-xl border ${
+                    formErrors.description ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'
+                  } focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
+                  placeholder="Description du ballot"
                 />
+                {formErrors.description && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>
+                )}
               </div>
             </div>
 
@@ -432,10 +484,14 @@ const AdminDashboard = () => {
                     <input
                       type="text"
                       value={option}
-                      onChange={(e) => updateOption(index, e.target.value)}
-                      className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                      onChange={(e) => {
+                        updateOption(index, e.target.value);
+                        setFormErrors(prev => ({ ...prev, options: undefined }));
+                      }}
+                      className={`flex-1 px-4 py-3 rounded-xl border ${
+                        formErrors.options ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200'
+                      } focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200`}
                       placeholder={`Option ${index + 1}`}
-                      required
                     />
                     {newBallot.options.length > 2 && (
                       <button
@@ -448,7 +504,9 @@ const AdminDashboard = () => {
                     )}
                   </div>
                 ))}
-
+                {formErrors.options && (
+                  <p className="mt-1 text-sm text-red-600">{formErrors.options}</p>
+                )}
                 <button
                   type="button"
                   onClick={addOption}
