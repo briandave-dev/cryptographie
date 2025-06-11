@@ -1,3 +1,4 @@
+// prisma/schema.prisma
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -7,40 +8,68 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id            String   @id @default(uuid())
   username      String   @unique
   password      String
+  role          Role     @default(USER)
   publicKey     String   @db.Text
-  encryptedKey  String   @db.Text  // Encrypted private key
+  encryptedKey  String   @db.Text
   votes         Vote[]
+  createdAt     DateTime @default(now())
+  
+  @@map("users")
 }
 
+// MODÈLE VOTE CORRIGÉ - Plus d'optionId ni signature séparés
 model Vote {
   id            String   @id @default(uuid())
   userId        String
   ballotId      String
-  encryptedVote String
-  signature     String
+  encryptedVote String   @db.Text  
+  voteHash      String   @unique   
   createdAt     DateTime @default(now())
   
   user          User     @relation(fields: [userId], references: [id])
   ballot        Ballot   @relation(fields: [ballotId], references: [id])
+  
+  @@unique([userId, ballotId]) // Un utilisateur = un vote par ballot
+  @@map("votes")
 }
 
 model Ballot {
   id        String    @id @default(uuid())
   title     String
+  description String?
+  isActive  Boolean   @default(true)
   options   Option[]
   votes     Vote[]
+  createdBy String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  
+  @@map("ballots")
 }
 
 model Option {
   id        String   @id @default(uuid())
   value     String
   ballotId  String
-  ballot    Ballot   @relation(fields: [ballotId], references: [id])
+  ballot    Ballot   @relation(fields: [ballotId], references: [id], onDelete: Cascade)
+  
+  @@map("options")
+}
 
+model AdminKeys {
+  id         String   @id @default(uuid())
+  publicKey  String   @db.Text
+  privateKey String   @db.Text // Chiffré avec mot de passe admin
+  createdAt  DateTime @default(now())
+  
+  @@map("admin_keys")
 }

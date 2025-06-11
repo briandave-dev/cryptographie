@@ -1,51 +1,52 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { decryptSession } from '@/lib/session';
+import jwt from 'jsonwebtoken';
 
-export async function middleware(request: NextRequest) {
-  // Public paths that don't require authentication
-  const publicPaths = ['/login', '/register', '/', '/api/auth/signin', '/api/auth/register', '/api/auth/signout'];
-  
-  const isPublicPath = publicPaths.some(path => 
-    request.nextUrl.pathname.startsWith(path)
-  );
-  
-  if (isPublicPath) {
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('token')?.value;
+  const { pathname } = request.nextUrl;
+
+  // Public routes
+  const publicRoutes = ['/auth/login', '/auth/register', '/'];
+  const adminRoutes = ['/admin'];
+  const userRoutes = ['/vote', '/dashboard'];
+
+  // Allow public routes
+  if (publicRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 
-  // Check for session cookie
-  const session = request.cookies.get('session');
-  
-  if (!session) {
-    console.log('No session found, redirecting to login');
+  // Check if user is authenticated
+  if (!token) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
   try {
-    const sessionData = await decryptSession(request);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
     
-    if (!sessionData) {
-      console.log('Invalid session, redirecting to login');
-      return NextResponse.redirect(new URL('/login', request.url));
+    // Check admin routes
+    if (adminRoutes.some(route => pathname.startsWith(route))) {
+      if (decoded.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/vote', request.url));
+      }
+    }
+
+    // Check user routes
+    if (userRoutes.some(route => pathname.startsWith(route))) {
+      if (decoded.role !== 'USER' && decoded.role !== 'ADMIN') {
+        return NextResponse.redirect(new URL('/login', request.url));
+      }
     }
 
     return NextResponse.next();
   } catch (error) {
-    console.error('Session verification failed:', error);
+    // Invalid token
     return NextResponse.redirect(new URL('/login', request.url));
   }
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-}
+};

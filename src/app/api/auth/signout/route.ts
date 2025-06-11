@@ -1,13 +1,17 @@
 import { NextResponse } from 'next/server';
-import { deleteSession } from '@/lib/session';
+import { cookies } from 'next/headers';
 
 export async function POST() {
   try {
-    await deleteSession();
-    return NextResponse.json({ message: 'Logged out successfully' });
+    (await cookies()).delete('token');
+    
+    return NextResponse.json({
+      message: 'Logout successful'
+    });
   } catch (error) {
+    console.error('Logout error:', error);
     return NextResponse.json(
-      { error: 'Failed to logout' },
+      { error: 'Logout failed' },
       { status: 500 }
     );
   }
