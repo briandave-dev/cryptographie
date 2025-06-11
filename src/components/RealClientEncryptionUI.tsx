@@ -4,7 +4,7 @@ import { Lock, Shield, CheckCircle, AlertCircle, Key, X } from 'lucide-react';
 // Classe pour le chiffrement RSA côté client
 class ClientCrypto {
   // Convertir clé PEM en format utilisable par WebCrypto
-  static async importPublicKey(pemKey) {
+  static async importPublicKey(pemKey: any) {
     const binaryDer = this.pemToBinary(pemKey);
     return await window.crypto.subtle.importKey(
       'spki',
@@ -19,7 +19,7 @@ class ClientCrypto {
   }
 
   // Convertir PEM en binaire
-  static pemToBinary(pem) {
+  static pemToBinary(pem: any) {
     const base64 = pem
       .replace(/-----BEGIN PUBLIC KEY-----/, '')
       .replace(/-----END PUBLIC KEY-----/, '')
@@ -34,7 +34,7 @@ class ClientCrypto {
   }
 
   // Chiffrer l'ID d'option avec la clé publique admin
-  static async encryptOptionId(optionId, publicKey) {
+  static async encryptOptionId(optionId: any, publicKey: any) {
     const encoder = new TextEncoder();
     const data = encoder.encode(optionId);
     
@@ -53,13 +53,31 @@ class ClientCrypto {
 }
 
 const SimpleVotingUI = () => {
-  const [ballots, setBallots] = useState([]);
-  const [userVotes, setUserVotes] = useState(new Set()); // Ballots déjà votés
-  const [selectedBallot, setSelectedBallot] = useState(null);
+  type BallotOption = {
+    id: string;
+    value: string;
+  };
+  
+  type Ballot = {
+    id: string;
+    title: string;
+    description: string;
+    options: BallotOption[];
+  };
+  
+  const [ballots, setBallots] = useState<Ballot[]>([]);
+  const [userVotes, setUserVotes] = useState<Set<string>>(new Set()); // Ballots déjà votés
+  const [selectedBallot, setSelectedBallot] = useState<Ballot | null>(null);
   const [selectedOption, setSelectedOption] = useState('');
-  const [adminPublicKeyCrypto, setAdminPublicKeyCrypto] = useState(null);
+  const [adminPublicKeyCrypto, setAdminPublicKeyCrypto] = useState<CryptoKey | null>(null);
   const [loading, setLoading] = useState(false);
-  const [voteResult, setVoteResult] = useState(null);
+  type VoteResult = {
+    success: boolean;
+    message: string;
+    hash?: string;
+  } | null;
+  
+  const [voteResult, setVoteResult] = useState<VoteResult>(null);
 
   useEffect(() => {
     fetchBallots();
@@ -84,7 +102,7 @@ const SimpleVotingUI = () => {
       const data = await response.json();
       
       // Créer un Set des ballotIds pour lesquels l'utilisateur a voté
-      const votedBallotIds = new Set(data.map(vote => vote.ballotId));
+      const votedBallotIds = new Set<string>(data.map((vote: { ballotId: any; }) => vote.ballotId));
       setUserVotes(votedBallotIds);
     } catch (error) {
       console.error('Error fetching user votes:', error);
@@ -105,7 +123,7 @@ const SimpleVotingUI = () => {
   };
 
   // Vérifier si l'utilisateur peut ouvrir ce ballot
-  const handleBallotClick = (ballot) => {
+  const handleBallotClick = (ballot: any) => {
     if (userVotes.has(ballot.id)) {
       // Ballot déjà voté - empêcher l'ouverture
       setVoteResult({
@@ -136,6 +154,16 @@ const SimpleVotingUI = () => {
     try {
       // Chiffrement côté client
       const encryptedOptionId = await ClientCrypto.encryptOptionId(selectedOption, adminPublicKeyCrypto);
+
+      if (!selectedBallot) {
+        setVoteResult({
+          success: false,
+          message: 'Aucun ballot sélectionné.'
+        });
+        setLoading(false);
+        setTimeout(() => setVoteResult(null), 3000);
+        return;
+      }
       
       // Envoi au serveur
       const votePayload = {
@@ -170,7 +198,7 @@ const SimpleVotingUI = () => {
         throw new Error(result.error || 'Erreur lors du vote');
       }
 
-    } catch (error) {
+    } catch (error: any) {
       setVoteResult({
         success: false,
         message: 'Erreur lors du vote: ' + error.message
