@@ -310,29 +310,29 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
+      {/* Header - Made responsive */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-indigo-100 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
               <div className="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl">
                 <Settings className="h-6 w-6 text-white" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <div className="text-center sm:text-left">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                   Administration
                 </h1>
-                <p className="text-gray-600">Gestion du système de vote cryptographique</p>
+                <p className="text-sm sm:text-base text-gray-600">Gestion du système de vote</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 bg-emerald-50 px-3 py-2 rounded-lg">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <div className="hidden sm:flex items-center space-x-2 bg-emerald-50 px-3 py-2 rounded-lg">
                 <Lock className="h-4 w-4 text-emerald-600" />
                 <span className="text-sm font-medium text-emerald-700">RSA 2048</span>
               </div>
               <button
                 onClick={() => logout()}
-                className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200"
+                className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
               >
                 Déconnexion
               </button>
@@ -341,10 +341,10 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 space-y-8">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-indigo-100 hover:shadow-xl transition-all duration-300">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+        {/* Stats Cards - Made responsive */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-indigo-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm font-medium">Total Ballots</p>
@@ -356,7 +356,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-purple-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm font-medium">Votes Totaux</p>
@@ -370,7 +370,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-emerald-100 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 sm:p-6 border border-emerald-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-gray-600 text-sm font-medium">Ballots Actifs</p>
@@ -385,15 +385,15 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Create New Ballot */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-indigo-100 shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-            <Plus className="h-6 w-6 mr-2 text-indigo-600" />
+        {/* Create New Ballot - Made responsive */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 sm:p-8 border border-indigo-100 shadow-lg">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center">
+            <Plus className="h-5 w-5 sm:h-6 sm:w-6 mr-2 text-indigo-600" />
             Créer un Nouveau Ballot
           </h2>
 
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Titre du Ballot
@@ -471,22 +471,22 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Existing Ballots */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-indigo-100 shadow-lg">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Ballots Existants</h2>
+        {/* Existing Ballots - Made responsive */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 sm:p-8 border border-indigo-100 shadow-lg">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Ballots Existants</h2>
 
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:gap-6">
             {ballots.map((ballot) => (
-              <div key={ballot.id} className="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
-                <div className="flex items-center justify-between mb-4">
+              <div key={ballot.id} className="bg-white rounded-xl p-4 sm:p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 space-y-2 sm:space-y-0">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-800">{ballot.title}</h3>
+                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800">{ballot.title}</h3>
                     {ballot.description && (
-                      <p className="text-gray-600">{ballot.description}</p>
+                      <p className="text-sm text-gray-600">{ballot.description}</p>
                     )}
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+                    <span className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm font-medium w-full sm:w-auto text-center">
                       {ballot._count?.votes || 0} votes
                     </span>
                     <button
@@ -495,7 +495,7 @@ const AdminDashboard = () => {
                         setShowDecryptModal(true);
                         setDecryptedResults(null);
                       }}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center space-x-2"
+                      className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 flex items-center justify-center space-x-2 w-full sm:w-auto"
                     >
                       <Unlock className="h-4 w-4" />
                       <span>Déchiffrer</span>
@@ -503,7 +503,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
                   {ballot.options.map((option: any) => (
                     <div key={option.id} className="bg-gray-50 rounded-lg p-3 text-center">
                       <span className="text-sm font-medium text-gray-700">{option.value}</span>
@@ -516,10 +516,10 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Decrypt Modal */}
+      {/* Modal - Made responsive */}
       {showDecryptModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-2xl p-4 sm:p-8 max-w-6xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-2xl font-bold text-gray-800">
                 Déchiffrement des Votes - {selectedBallot?.title}

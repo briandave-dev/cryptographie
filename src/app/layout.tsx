@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { fontSans } from "@/lib/fonts";
+import { Space_Grotesk } from "next/font/google";
 
 export const metadata: Metadata = {
-  title: "Voting App",
-  description: "Application for secure voting using cryptographic algorithms",
+ title: "VoteCrypto - Système de Vote Électronique Sécurisé",
+ description: "Plateforme de vote électronique démonstrative utilisant le chiffrement asymétrique RSA pour garantir la confidentialité, l'intégrité et l'authenticité des votes",
 };
+
+const font = Space_Grotesk({ subsets: ["latin"] });
+
 
 export default function RootLayout({
   children,
@@ -14,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased ${fontSans.variable}`}>
+      <body className={`antialiased ${font.className}`}>
         {children}
 
       </body>

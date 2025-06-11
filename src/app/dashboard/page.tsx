@@ -184,44 +184,48 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      {/* Header */}
+      {/* Responsive Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
             <div className="flex items-center space-x-4">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
-                <BarChart3 className="h-6 w-6 text-white" />
+              <div className="p-2 sm:p-3 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl">
+                <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <div className="text-center sm:text-left">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                   Dashboard des Résultats
                 </h1>
-                <p className="text-gray-600">Analyse en temps réel des votes cryptographiques</p>
+                <p className="text-sm sm:text-base text-gray-600">Analyse en temps réel</p>
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap justify-center sm:justify-end items-center gap-2 sm:gap-4">
               <button
                 onClick={fetchBallots}
                 disabled={refreshing}
-                className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-all duration-200"
+                className="flex items-center space-x-2 bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-all duration-200 text-sm sm:text-base"
               >
                 <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                <span>Actualiser</span>
+                <span className="hidden sm:inline">Actualiser</span>
               </button>
+
               <button
-                onClick={() =>  window.location.href = '/vote'}
-              className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200">
+                onClick={() => window.location.href = '/vote'}
+                className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
+              >
                 Mes votes
               </button>
               
-              <div className="flex items-center space-x-2 bg-emerald-50 px-3 py-2 rounded-lg">
+              <div className="hidden sm:flex items-center space-x-2 bg-emerald-50 px-3 py-2 rounded-lg">
                 <Shield className="h-4 w-4 text-emerald-600" />
                 <span className="text-sm font-medium text-emerald-700">Sécurisé</span>
               </div>
+
               <button
-                onClick={() => logout()}
-              className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200">
+                onClick={logout}
+                className="bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 sm:px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-200 text-sm sm:text-base"
+              >
                 Déconnexion
               </button>
             </div>
@@ -229,76 +233,77 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 space-y-8">
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-blue-100 hover:shadow-xl transition-all duration-300">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+        {/* Responsive Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Stats cards with adjusted padding */}
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-blue-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Total Ballots</p>
-                <p className="text-3xl font-bold text-blue-600">{ballots.length}</p>
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Total Ballots</p>
+                <p className="text-xl sm:text-3xl font-bold text-blue-600">{ballots.length}</p>
               </div>
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <Vote className="h-6 w-6 text-blue-600" />
+              <div className="p-2 sm:p-3 bg-blue-100 rounded-xl">
+                <Vote className="h-4 w-4 sm:h-6 sm:w-6 text-blue-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-indigo-100 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-indigo-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Ballots Actifs</p>
-                <p className="text-3xl font-bold text-indigo-600">{activeBallots}</p>
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Ballots Actifs</p>
+                <p className="text-xl sm:text-3xl font-bold text-indigo-600">{activeBallots}</p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-xl">
-                <TrendingUp className="h-6 w-6 text-indigo-600" />
+              <div className="p-2 sm:p-3 bg-indigo-100 rounded-xl">
+                <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-indigo-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-purple-100 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-purple-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Total Votes</p>
-                <p className="text-3xl font-bold text-purple-600">{totalVotes}</p>
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Total Votes</p>
+                <p className="text-xl sm:text-3xl font-bold text-purple-600">{totalVotes}</p>
               </div>
-              <div className="p-3 bg-purple-100 rounded-xl">
-                <Users className="h-6 w-6 text-purple-600" />
+              <div className="p-2 sm:p-3 bg-purple-100 rounded-xl">
+                <Users className="h-4 w-4 sm:h-6 sm:w-6 text-purple-600" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-emerald-100 hover:shadow-xl transition-all duration-300">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-emerald-100 hover:shadow-xl transition-all duration-300">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-gray-600 text-sm font-medium">Participation</p>
-                <p className="text-3xl font-bold text-emerald-600">
+                <p className="text-xs sm:text-sm text-gray-600 font-medium">Participation</p>
+                <p className="text-xl sm:text-3xl font-bold text-emerald-600">
                   {ballots.length > 0 ? Math.round((totalVotes / ballots.length) * 10) / 10 : 0}
                 </p>
               </div>
-              <div className="p-3 bg-emerald-100 rounded-xl">
-                <BarChart3 className="h-6 w-6 text-emerald-600" />
+              <div className="p-2 sm:p-3 bg-emerald-100 rounded-xl">
+                <BarChart3 className="h-4 w-4 sm:h-6 sm:w-6 text-emerald-600" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Ballot Selection */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-slate-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Sélectionner un Ballot</h3>
-          <div className="flex flex-wrap gap-3">
+        {/* Responsive Ballot Selection */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-4">Sélectionner un Ballot</h3>
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {ballots.map((ballot) => (
               <button
                 key={ballot.id}
                 onClick={() => setSelectedBallot(ballot)}
-                className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 ${
+                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border-2 text-sm sm:text-base transition-all duration-200 ${
                   selectedBallot?.id === ballot.id
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300'
                 }`}
               >
                 {ballot.title}
-                <span className="ml-2 text-sm opacity-75">
+                <span className="ml-1 sm:ml-2 text-xs sm:text-sm opacity-75">
                   ({ballot._count?.votes || 0})
                 </span>
               </button>
@@ -308,142 +313,41 @@ const Dashboard = () => {
 
         {selectedBallot && (
           <>
-            {/* Ballot Details */}
-            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 border border-slate-200">
-              <div className="flex items-center justify-between mb-4">
+            {/* Responsive Ballot Details */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-200">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800">{selectedBallot.title}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800">{selectedBallot.title}</h2>
                   {selectedBallot.description && (
-                    <p className="text-gray-600 mt-1">{selectedBallot.description}</p>
+                    <p className="text-sm sm:text-base text-gray-600 mt-1">{selectedBallot.description}</p>
                   )}
                 </div>
                 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center gap-3">
                   <div className="flex items-center space-x-2 bg-amber-50 px-3 py-2 rounded-lg">
                     <Lock className="h-4 w-4 text-amber-600" />
-                    <span className="text-sm font-medium text-amber-700">Chiffré</span>
+                    <span className="text-xs sm:text-sm font-medium text-amber-700">Chiffré</span>
                   </div>
                   
                   <div className="text-right">
-                    <div className="text-2xl font-bold text-blue-600">
+                    <div className="text-xl sm:text-2xl font-bold text-blue-600">
                       {selectedBallot._count?.votes || 0}
                     </div>
-                    <div className="text-sm text-gray-600">votes</div>
+                    <div className="text-xs sm:text-sm text-gray-600">votes</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* View Mode Toggle */}
-            {/* <div className="flex justify-center">
-              <div className="bg-white/70 backdrop-blur-sm rounded-xl p-2 border border-slate-200">
-                <div className="flex space-x-2">
-                  {[
-                    { mode: 'chart', icon: BarChart3, label: 'Graphique' },
-                    { mode: 'pie', icon: PieChart, label: 'Camembert' },
-                    { mode: 'table', icon: Eye, label: 'Tableau' }
-                  ].map(({ mode, icon: Icon, label }) => (
-                    <button
-                      key={mode}
-                      onClick={() => setViewMode(mode)}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                        viewMode === mode
-                          ? 'bg-blue-500 text-white shadow-lg'
-                          : 'text-gray-600 hover:bg-gray-100'
-                      }`}
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span className="text-sm font-medium">{label}</span>
-                    </button>
-                  ))}
+            {/* Responsive Encryption Info */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-4">
+                <div className="p-2 sm:p-3 bg-blue-100 rounded-xl">
+                  <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                 </div>
-              </div>
-            </div> */}
-
-            {/* Results Display */}
-            {/* <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-slate-200 shadow-lg">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  Résultats en Temps Réel
-                </h3>
-                
-                <div className="flex items-center space-x-3">
-                  <button className="flex items-center space-x-2 bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors duration-200">
-                    <Download className="h-4 w-4" />
-                    <span>Exporter</span>
-                  </button>
-                </div>
-              </div>
-
-              {chartData.length > 0 ? (
-                <div className="min-h-[400px] flex items-center justify-center">
-                  {viewMode === 'chart' && <BarChart data={chartData} />}
-                  {viewMode === 'pie' && <PieChartComponent data={chartData} />}
-                  {viewMode === 'table' && (
-                    <div className="w-full">
-                      <div className="overflow-hidden rounded-xl border border-gray-200">
-                        <table className="w-full">
-                          <thead className="bg-gray-50">
-                            <tr>
-                              <th className="px-6 py-4 text-left text-sm font-medium text-gray-700">Option</th>
-                              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700">Votes</th>
-                              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700">Pourcentage</th>
-                              <th className="px-6 py-4 text-center text-sm font-medium text-gray-700">Visualisation</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-gray-200">
-                            {chartData.map((item, index) => (
-                              <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
-                                <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                                  {item.label}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                  <span className="text-lg font-bold" style={{ color: item.color }}>
-                                    {item.votes}
-                                  </span>
-                                </td>
-                                <td className="px-6 py-4 text-center text-gray-600">
-                                  {item.percentage}%
-                                </td>
-                                <td className="px-6 py-4">
-                                  <div className="w-full bg-gray-200 rounded-full h-3">
-                                    <div
-                                      className="h-3 rounded-full transition-all duration-500"
-                                      style={{
-                                        width: `${item.percentage}%`,
-                                        backgroundColor: item.color
-                                      }}
-                                    />
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="p-4 bg-gray-100 rounded-full inline-block mb-4">
-                    <BarChart3 className="h-8 w-8 text-gray-400" />
-                  </div>
-                  <h3 className="text-xl font-medium text-gray-600 mb-2">Aucun vote disponible</h3>
-                  <p className="text-gray-500">Les résultats apparaîtront ici une fois que les votes seront soumis.</p>
-                </div>
-              )}
-            </div> */}
-
-            {/* Encryption Info */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-2xl p-6">
-              <div className="flex items-start space-x-4">
-                <div className="p-3 bg-blue-100 rounded-xl">
-                  <Lock className="h-6 w-6 text-blue-600" />
-                </div>
-                <div>
+                <div className="text-center sm:text-left">
                   <h4 className="font-semibold text-blue-800 mb-2">Information sur le Chiffrement</h4>
-                  <p className="text-blue-700 text-sm leading-relaxed">
+                  <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
                     Ces résultats sont basés sur une simulation. Pour voir les vrais résultats déchiffrés, 
                     l'administrateur doit utiliser sa clé privée RSA 2048 bits pour déchiffrer les votes. 
                     Chaque vote est chiffré individuellement et ne peut être lu que par l'administrateur.
