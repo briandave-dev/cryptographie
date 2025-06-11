@@ -2,18 +2,49 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Users, Vote, Settings, BarChart3, Lock, Unlock, Eye, EyeOff, Clock, CheckCircle, AlertCircle, Download, User } from 'lucide-react';
 
+
+type Ballot = {
+  id: string;
+  title: string;
+  description?: string;
+  options: any[];
+  isActive?: boolean;
+  _count?: { votes?: number };
+  // Add other properties as needed
+};
+
 const AdminDashboard = () => {
-  const [ballots, setBallots] = useState([]);
+  type Ballot = {
+    id: string;
+    title: string;
+    description?: string;
+    options: any[];
+    isActive?: boolean;
+    _count?: { votes?: number };
+    // Add other properties as needed
+  };
+  const [ballots, setBallots] = useState<Ballot[]>([]);
   const [newBallot, setNewBallot] = useState({
     title: '',
     description: '',
     options: ['', '']
   });
   const [showDecryptModal, setShowDecryptModal] = useState(false);
-  const [selectedBallot, setSelectedBallot] = useState(null);
+  const [selectedBallot, setSelectedBallot] = useState<Ballot | null>(null);
   const [adminPassword, setAdminPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [decryptedResults, setDecryptedResults] = useState(null);
+  type DecryptedResults = {
+    validVotes: number;
+    totalVotes: number;
+    results: any[];
+    summary?: {
+      winner: string;
+      winnerVotes: number;
+      winnerPercentage: number;
+    };
+    decryptedVotes: any[];
+  };
+  const [decryptedResults, setDecryptedResults] = useState<DecryptedResults | null>(null);
   const [loading, setLoading] = useState(false);
   const [viewMode, setViewMode] = useState('overview'); // 'overview', 'voters', 'details'
 
@@ -33,7 +64,7 @@ const AdminDashboard = () => {
 
   const handleCreateBallot = async () => {
     setLoading(true);
-    
+
     try {
       const response = await fetch('/api/admin/ballots', {
         method: 'POST',
@@ -57,6 +88,10 @@ const AdminDashboard = () => {
   };
 
   const handleDecryptVotes = async () => {
+    if (!selectedBallot) {
+      alert('Aucun ballot sélectionné.');
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetch('/api/admin/decrypt-votes', {
@@ -356,7 +391,7 @@ const AdminDashboard = () => {
             <Plus className="h-6 w-6 mr-2 text-indigo-600" />
             Créer un Nouveau Ballot
           </h2>
-          
+
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -372,7 +407,7 @@ const AdminDashboard = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Description
@@ -413,7 +448,7 @@ const AdminDashboard = () => {
                     )}
                   </div>
                 ))}
-                
+
                 <button
                   type="button"
                   onClick={addOption}
@@ -439,7 +474,7 @@ const AdminDashboard = () => {
         {/* Existing Ballots */}
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-8 border border-indigo-100 shadow-lg">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Ballots Existants</h2>
-          
+
           <div className="grid gap-6">
             {ballots.map((ballot) => (
               <div key={ballot.id} className="bg-white rounded-xl p-6 border border-gray-100 hover:shadow-md transition-all duration-200">
@@ -467,7 +502,7 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {ballot.options.map((option: any) => (
                     <div key={option.id} className="bg-gray-50 rounded-lg p-3 text-center">
@@ -592,11 +627,10 @@ const AdminDashboard = () => {
                         <button
                           key={mode}
                           onClick={() => setViewMode(mode)}
-                          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                            viewMode === mode
+                          className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${viewMode === mode
                               ? 'bg-indigo-500 text-white shadow-lg'
                               : 'text-gray-600 hover:bg-gray-200'
-                          }`}
+                            }`}
                         >
                           <Icon className="h-4 w-4" />
                           <span className="text-sm font-medium">{label}</span>

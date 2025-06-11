@@ -18,7 +18,7 @@ const EnhancedAuth = () => {
     {
       id: 'length',
       label: 'Au moins 8 caractères',
-      validator: (pw) => pw.length >= 8,
+      validator: (pw: any) => pw.length >= 8,
       met: false
     },
     {

@@ -2,9 +2,18 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart3, PieChart, TrendingUp, Users, Vote, Shield, Lock, Unlock, RefreshCw, Download, Eye } from 'lucide-react';
 
+type Ballot = {
+  id: string;
+  title: string;
+  description?: string;
+  isActive: boolean;
+  options?: { value: string }[];
+  _count?: { votes?: number };
+};
+
 const Dashboard = () => {
-  const [ballots, setBallots] = useState([]);
-  const [selectedBallot, setSelectedBallot] = useState(null);
+  const [ballots, setBallots] = useState<Ballot[]>([]);
+  const [selectedBallot, setSelectedBallot] = useState<Ballot | null>(null);
   const [decryptedResults, setDecryptedResults] = useState({});
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -65,11 +74,11 @@ const Dashboard = () => {
   const activeBallots = ballots.filter(b => b.isActive).length;
 
   // Simulation de données pour les graphiques (en attendant le vrai déchiffrement)
-  const getChartData = (ballot) => {
+  const getChartData = (ballot: any) => {
     if (!ballot || !ballot.options) return [];
     
     // Simulation de résultats réalistes
-    return ballot.options.map((option, index) => ({
+    return ballot.options.map((option: any, index: any) => ({
       label: option.value,
       votes: Math.floor(Math.random() * 50) + 10,
       percentage: Math.floor(Math.random() * 30) + 10,
@@ -78,100 +87,100 @@ const Dashboard = () => {
   };
 
   const chartData = selectedBallot ? getChartData(selectedBallot) : [];
-  const maxVotes = Math.max(...chartData.map(d => d.votes), 1);
+  const maxVotes = Math.max(...chartData.map((d: { votes: any; }) => d.votes), 1);
 
-  const BarChart = ({ data }) => (
-    <div className="space-y-4">
-      {data.map((item, index) => (
-        <div key={index} className="group">
-          <div className="flex justify-between items-center mb-2">
-            <span className="font-medium text-gray-700">{item.label}</span>
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold" style={{ color: item.color }}>{item.votes}</span>
-              <span className="text-sm text-gray-500">({item.percentage}%)</span>
-            </div>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
-              style={{
-                width: `${(item.votes / maxVotes) * 100}%`,
-                backgroundColor: item.color
-              }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  // const BarChart = ({ data:  }) => (
+  //   <div className="space-y-4">
+  //     {data.map((item, index) => (
+  //       <div key={index} className="group">
+  //         <div className="flex justify-between items-center mb-2">
+  //           <span className="font-medium text-gray-700">{item.label}</span>
+  //           <div className="flex items-center space-x-2">
+  //             <span className="text-xl font-bold" style={{ color: item.color }}>{item.votes}</span>
+  //             <span className="text-sm text-gray-500">({item.percentage}%)</span>
+  //           </div>
+  //         </div>
+  //         <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+  //           <div
+  //             className="h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden"
+  //             style={{
+  //               width: `${(item.votes / maxVotes) * 100}%`,
+  //               backgroundColor: item.color
+  //             }}
+  //           >
+  //             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+  //           </div>
+  //         </div>
+  //       </div>
+  //     ))}
+  //   </div>
+  // );
 
-  const PieChartComponent = ({ data }) => {
-    const total = data.reduce((sum, item) => sum + item.votes, 0);
-    let currentAngle = 0;
+  // const PieChartComponent = ({ data }) => {
+  //   const total = data.reduce((sum, item) => sum + item.votes, 0);
+  //   let currentAngle = 0;
 
-    return (
-      <div className="flex items-center justify-center">
-        <div className="relative">
-          <svg width="300" height="300" className="transform -rotate-90">
-            <circle
-              cx="150"
-              cy="150"
-              r="120"
-              fill="none"
-              stroke="#f3f4f6"
-              strokeWidth="20"
-            />
-            {data.map((item, index) => {
-              const angle = (item.votes / total) * 360;
-              const path = `M 150 150 L 150 30 A 120 120 0 ${angle > 180 ? 1 : 0} 1 ${
-                150 + 120 * Math.sin((currentAngle + angle) * Math.PI / 180)
-              } ${
-                150 - 120 * Math.cos((currentAngle + angle) * Math.PI / 180)
-              } Z`;
+  //   return (
+  //     <div className="flex items-center justify-center">
+  //       <div className="relative">
+  //         <svg width="300" height="300" className="transform -rotate-90">
+  //           <circle
+  //             cx="150"
+  //             cy="150"
+  //             r="120"
+  //             fill="none"
+  //             stroke="#f3f4f6"
+  //             strokeWidth="20"
+  //           />
+  //           {data.map((item, index) => {
+  //             const angle = (item.votes / total) * 360;
+  //             const path = `M 150 150 L 150 30 A 120 120 0 ${angle > 180 ? 1 : 0} 1 ${
+  //               150 + 120 * Math.sin((currentAngle + angle) * Math.PI / 180)
+  //             } ${
+  //               150 - 120 * Math.cos((currentAngle + angle) * Math.PI / 180)
+  //             } Z`;
               
-              const result = (
-                <path
-                  key={index}
-                  d={path}
-                  fill={item.color}
-                  className="hover:opacity-80 transition-opacity duration-200 cursor-pointer"
-                  strokeWidth="2"
-                  stroke="white"
-                />
-              );
+  //             const result = (
+  //               <path
+  //                 key={index}
+  //                 d={path}
+  //                 fill={item.color}
+  //                 className="hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+  //                 strokeWidth="2"
+  //                 stroke="white"
+  //               />
+  //             );
               
-              currentAngle += angle;
-              return result;
-            })}
-          </svg>
+  //             currentAngle += angle;
+  //             return result;
+  //           })}
+  //         </svg>
           
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-800">{total}</div>
-              <div className="text-sm text-gray-600">Total</div>
-            </div>
-          </div>
-        </div>
+  //         <div className="absolute inset-0 flex items-center justify-center">
+  //           <div className="text-center">
+  //             <div className="text-3xl font-bold text-gray-800">{total}</div>
+  //             <div className="text-sm text-gray-600">Total</div>
+  //           </div>
+  //         </div>
+  //       </div>
         
-        <div className="ml-8 space-y-3">
-          {data.map((item, index) => (
-            <div key={index} className="flex items-center space-x-3">
-              <div
-                className="w-4 h-4 rounded-full"
-                style={{ backgroundColor: item.color }}
-              />
-              <div>
-                <div className="font-medium text-gray-700">{item.label}</div>
-                <div className="text-sm text-gray-500">{item.votes} votes ({item.percentage}%)</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
+  //       <div className="ml-8 space-y-3">
+  //         {data.map((item, index) => (
+  //           <div key={index} className="flex items-center space-x-3">
+  //             <div
+  //               className="w-4 h-4 rounded-full"
+  //               style={{ backgroundColor: item.color }}
+  //             />
+  //             <div>
+  //               <div className="font-medium text-gray-700">{item.label}</div>
+  //               <div className="text-sm text-gray-500">{item.votes} votes ({item.percentage}%)</div>
+  //             </div>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
