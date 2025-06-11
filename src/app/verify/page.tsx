@@ -1,4 +1,5 @@
 // filepath: c:\Users\DMountou\Documents\Projects\cryptographie\src\app\verify\page.tsx
+"use client"
 import React, { useState } from 'react';
 
 const VerifyVote = () => {
