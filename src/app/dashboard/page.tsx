@@ -340,7 +340,7 @@ const Dashboard = () => {
             </div>
 
             {/* Responsive Encryption Info */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
+            {/* <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl sm:rounded-2xl p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-4">
                 <div className="p-2 sm:p-3 bg-blue-100 rounded-xl">
                   <Lock className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
@@ -354,7 +354,7 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
           </>
         )}
       </div>
