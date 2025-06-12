@@ -738,12 +738,12 @@ const AdminDashboard = () => {
                 )}
 
                 {/* Export Button */}
-                <div className="flex justify-end">
+                {/* <div className="flex justify-end">
                   <button className="flex items-center space-x-2 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                     <Download className="h-4 w-4" />
                     <span>Exporter les Résultats</span>
                   </button>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
