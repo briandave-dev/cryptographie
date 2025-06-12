@@ -55,7 +55,7 @@ const HomePage = () => {
         </CardContent>
 
         <CardFooter className="text-center text-sm text-gray-500 dark:text-gray-400">
-          Sécurisé par RSA-2048 | Projet Groupe 3 GL
+          Sécurisé par RSA-2048 | Projet Groupe 4 GL
         </CardFooter>
       </Card>
     </div>
